@@ -1,0 +1,4 @@
+<!-- Versión inline del regalo - Copia este código directamente en tu HTML -->
+<svg class="icon icon-gift icon-medium" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <path fill="currentColor" d="M17.32,52.68v5.05h35.36v-20.2h5.05v-15.15h-17.68v-2.53h2.53v-2.53h2.53v-2.53h-2.53v-2.53h-2.53v2.53h-2.53v7.58h-5.05v-7.58h-2.53v-2.53h-2.53v2.53h-2.53v2.53h2.53v2.53h2.53v2.53H12.27v15.15h5.05v15.15ZM22.37,52.68v-15.15h7.58v15.15h-7.58ZM32.47,52.68v-15.15h5.05v15.15h-5.05ZM47.63,52.68h-7.58v-15.15h7.58v15.15ZM52.68,27.42v5.05h-12.63v-5.05h12.63ZM37.53,27.42v5.05h-5.05v-5.05h5.05ZM17.32,27.42h12.63v5.05h-12.63v-5.05Z"/>
+</svg>

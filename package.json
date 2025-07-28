@@ -1,0 +1,27 @@
+{
+  "name": "iconos-svg-dinamicos",
+  "version": "1.0.0",
+  "description": "Sistema interactivo para personalizar iconos SVG con colores dinámicos, animaciones y descarga automática",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "svg",
+    "icons",
+    "css",
+    "dynamic-colors",
+    "web-app",
+    "interactive"
+  ],
+  "author": "Ignacio Molina",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

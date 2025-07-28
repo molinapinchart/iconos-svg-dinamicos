@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Iconos SVG Dinámicos</title>
+    <link rel="stylesheet" href="iconos-styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+        
+        .demo-section {
+            margin-bottom: 48px;
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #fa345e;
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #fa345e;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        
+        .icon-demo {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .icon-demo:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .icon-demo .icon {
+            margin-bottom: 8px;
+        }
+        
+        .icon-demo-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+        
+        .interactive-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .control-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input[type="color"], input[type="range"] {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        
+        .preview-icon {
+            font-size: 48px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tab {
+            padding: 8px 16px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background: #fa345e;
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #cbd5e0;
+        }
+
+        /* Estilos para el botón de descarga */
+        #downloadBtn {
+            transition: all 0.2s ease;
+        }
+
+        #downloadBtn:hover {
+            background: #e73055 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 48, 85, 0.3);
+        }
+
+        #downloadBtn:active {
+            transform: translateY(0);
+        }
+
+        /* Estilos para los selectores */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px;
+        }
+
+        /* Estilos para la galería de iconos */
+        #iconGrid {
+            min-height: 60px;
+        }
+
+        #iconGrid:empty + #iconGridStatus {
+            display: block !important;
+        }
+
+        .icon-gallery-item {
+            transition: all 0.2s ease;
+        }
+
+        .icon-gallery-item:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Demo de Iconos SVG Dinámicos</h1>
+        
+        <!-- Tamaños -->
+        <div class="demo-section">
+            <h2>📏 Diferentes Tamaños</h2>
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                <div class="icon-demo">
+                    <svg class="icon icon-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Small (16px)</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Default (24px)</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Medium (32px)</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-large" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Large (48px)</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">XL (64px)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colores -->
+        <div class="demo-section">
+            <h2>🎨 Variaciones de Color</h2>
+            <div class="icon-grid">
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Rojo</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-pink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Rosa</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-purple" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Morado</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Azul</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Verde</div>
+                </div>
+                <div class="icon-demo">
+                    <svg class="icon icon-medium icon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                        <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47-63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                    </svg>
+                    <div class="icon-demo-label">Naranja</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estados -->
+        <div class="demo-section">
+            <h2>🎭 Estados y Estilos</h2>
+            <div class="icon-grid">
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-medium icon-filled"></object>
+                    <div class="icon-demo-label">Relleno</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-medium icon-outlined"></object>
+                    <div class="icon-demo-label">Solo contorno</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-medium icon-filled-outlined"></object>
+                    <div class="icon-demo-label">Relleno + contorno</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-medium icon-heart-gold"></object>
+                    <div class="icon-demo-label">Dorado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animaciones -->
+        <div class="demo-section">
+            <h2>✨ Animaciones</h2>
+            <div class="icon-grid">
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-large animate-heartbeat"></object>
+                    <div class="icon-demo-label">Latido de corazón</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-regalo-optimizado.svg" type="image/svg+xml" class="icon icon-large animate-shake"></object>
+                    <div class="icon-demo-label">Movimiento</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-corazon-optimizado.svg" type="image/svg+xml" class="icon icon-large animate-fade-in icon-glow"></object>
+                    <div class="icon-demo-label">Brillo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Efectos -->
+        <div class="demo-section">
+            <h2>🌟 Efectos Especiales</h2>
+            <div class="icon-grid">
+                <div class="icon-demo">
+                    <object data="icono-regalo-optimizado.svg" type="image/svg+xml" class="icon icon-large icon-shadow"></object>
+                    <div class="icon-demo-label">Sombra</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-regalo-optimizado.svg" type="image/svg+xml" class="icon icon-large icon-glow icon-blue"></object>
+                    <div class="icon-demo-label">Resplandor</div>
+                </div>
+                <div class="icon-demo">
+                    <object data="icono-regalo-optimizado.svg" type="image/svg+xml" class="icon icon-large icon-grayscale"></object>
+                    <div class="icon-demo-label">Escala de grises (hover para color)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control interactivo -->
+        <div class="demo-section">
+            <h2>🎮 Control Interactivo</h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                Personaliza tu icono eligiendo el tipo, colores, contorno y animación. 
+                Luego descarga el SVG con todas las configuraciones incluidas para usar en cualquier proyecto.
+            </p>
+
+            <!-- Sección de iconos disponibles -->
+            <div id="iconosDisponibles" style="background: #f8f9fa; border: 2px solid #28a745; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0; color: #28a745; display: flex; align-items: center; gap: 8px;">
+                    🎨 Iconos Disponibles para Personalizar
+                </h4>
+                <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">
+                    Haz clic en cualquier icono para seleccionarlo y personalizarlo
+                </p>
+                <div id="iconGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    <!-- Los iconos se cargarán aquí dinámicamente -->
+                </div>
+                <div id="iconGridStatus" style="color: #666; font-size: 14px; text-align: center; padding: 20px;">
+                    Carga iconos SVG para verlos aquí
+                </div>
+            </div>
+
+            <!-- Sección de carga de archivos -->
+            <div style="background: #f0f8ff; border: 2px dashed #2196f3; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0; color: #2196f3; display: flex; align-items: center; gap: 8px;">
+                    📁 Cargar y Optimizar SVG Personalizado
+                </h4>
+                <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">
+                    Sube tu propio archivo SVG y se optimizará automáticamente para usar con colores dinámicos
+                </p>
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <input type="file" id="svgFileInput" accept=".svg,image/svg+xml" style="margin: 0;">
+                    <button id="loadSvgBtn" style="background: #2196f3; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                        🔄 Optimizar y Guardar SVG
+                    </button>
+                    <button id="resetToDefault" style="background: #9e9e9e; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                        ↺ Volver a iconos originales
+                    </button>
+                </div>
+                <div id="fileStatus" style="margin-top: 12px; font-size: 14px;"></div>
+            </div>
+
+            <div class="interactive-controls">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <div>
+                        <div class="control-group">
+                            <label for="fillColor">Color de relleno:</label>
+                            <input type="color" id="fillColor" value="#fa345e">
+                        </div>
+                        <div class="control-group">
+                            <label for="strokeColor">Color de contorno:</label>
+                            <input type="color" id="strokeColor" value="#000000">
+                        </div>
+                        <div class="control-group">
+                            <label for="strokeWidth">Grosor del contorno: <span id="strokeValue">2</span>px</label>
+                            <input type="range" id="strokeWidth" min="0" max="5" value="2" step="0.5">
+                        </div>
+                        <div class="control-group">
+                            <label for="iconType">Tipo de icono:</label>
+                            <select id="iconType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;">
+                                <option value="heart">Corazón</option>
+                                <option value="gift">Regalo</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="animationType">Animación:</label>
+                            <select id="animationType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;">
+                                <option value="none">Sin animación</option>
+                                <option value="heartbeat">Latido de corazón</option>
+                                <option value="shake">Movimiento</option>
+                                <option value="fade-in">Entrada suave</option>
+                            </select>
+                        </div>
+                        <button id="downloadBtn" style="width: 100%; padding: 12px; background: #fa345e; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px;">
+                            📥 Descargar SVG Personalizado
+                        </button>
+                        <button id="previewBtn" style="width: 100%; padding: 8px; background: #2196f3; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer; margin-top: 8px; font-size: 14px;">
+                            👁️ Ver Código SVG
+                        </button>
+                    </div>
+                    <div class="preview-icon">
+                        <svg class="icon icon-xl" id="previewIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+                            <polygon fill="currentColor" points="17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Código de ejemplo -->
+        <div class="demo-section">
+            <h2>💻 Código de Ejemplo</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('html')">HTML</button>
+                <button class="tab" onclick="showTab('css')">CSS</button>
+                <button class="tab" onclick="showTab('js')">JavaScript</button>
+            </div>
+
+            <div id="html-tab" class="code-block">
+&lt;!-- Método recomendado: SVG inline con clases CSS --&gt;
+&lt;svg class="icon icon-medium icon-red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70"&gt;
+  &lt;polygon fill="currentColor" points="17.32 40.05 22.37 40.05..."&gt;&lt;/polygon&gt;
+&lt;/svg&gt;
+
+&lt;!-- SVG generado con colores y animaciones incluidas --&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" class="animated"&gt;
+  &lt;style&gt;
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.1); }
+      50% { transform: scale(1.2); }
+      75% { transform: scale(1.1); }
+    }
+    .animated { animation: heartbeat 1s infinite; }
+  &lt;/style&gt;
+  &lt;polygon fill="#ff6b6b" points="17.32 40.05 22.37 40.05..."&gt;&lt;/polygon&gt;
+&lt;/svg&gt;
+
+&lt;!-- Usando archivos externos (alternativo) --&gt;
+&lt;img src="icono-corazon-optimizado.svg" class="icon icon-medium icon-red" alt="Corazón"&gt;
+            </div>
+
+            <div id="css-tab" class="code-block" style="display: none;">
+/* Crear tu propia variación de color */
+.icon-custom {
+  color: #your-color;
+}
+
+/* Agregar contorno con drop-shadow */
+.icon-with-outline {
+  color: #ff6b6b;
+  filter: drop-shadow(0 0 0 #333) 
+          drop-shadow(1px 0 0 #333) 
+          drop-shadow(-1px 0 0 #333) 
+          drop-shadow(0 1px 0 #333) 
+          drop-shadow(0 -1px 0 #333);
+}
+
+/* Usar en hover states */
+.icon:hover {
+  color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+/* Crear temas */
+.theme-dark .icon {
+  color: #fff;
+}
+            </div>
+
+            <div id="js-tab" class="code-block" style="display: none;">
+// Cambiar colores dinámicamente
+function changeIconColor(element, fillColor, strokeColor) {
+  element.style.color = fillColor;
+  
+  if (strokeColor && strokeColor !== 'transparent') {
+    element.style.filter = `
+      drop-shadow(0 0 0 ${strokeColor}) 
+      drop-shadow(1px 0 0 ${strokeColor}) 
+      drop-shadow(-1px 0 0 ${strokeColor}) 
+      drop-shadow(0 1px 0 ${strokeColor}) 
+      drop-shadow(0 -1px 0 ${strokeColor})
+    `;
+  } else {
+    element.style.filter = 'none';
+  }
+}
+
+// Generar SVG personalizado para descargar
+function generateCustomSVG(fillColor, strokeColor, strokeWidth, iconType, animation) {
+  const iconPaths = {
+    heart: 'polygon points="17.32 40.05 22.37 40.05..."',
+    gift: 'path d="M17.32,52.68v5.05h35.36v-20.2..."'
+  };
+  
+  const animations = {
+    heartbeat: '@keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.1); } }'
+  };
+  
+  return `&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70"&gt;
+    ${animation ? `&lt;style&gt;${animations[animation]} .animated { animation: ${animation} 1s infinite; }&lt;/style&gt;` : ''}
+    &lt;${iconPaths[iconType]} fill="${fillColor}"/&gt;
+  &lt;/svg&gt;`;
+}
+
+// Descargar SVG como archivo
+function downloadSVG(svgContent, filename) {
+  const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Ejemplo de uso
+const icon = document.querySelector('.icon');
+changeIconColor(icon, '#ff6b6b', '#333333');
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Control interactivo
+        const fillColorInput = document.getElementById('fillColor');
+        const strokeColorInput = document.getElementById('strokeColor');
+        const strokeWidthInput = document.getElementById('strokeWidth');
+        const strokeValue = document.getElementById('strokeValue');
+        const previewIcon = document.getElementById('previewIcon');
+        const iconTypeSelect = document.getElementById('iconType');
+        const animationTypeSelect = document.getElementById('animationType');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const svgFileInput = document.getElementById('svgFileInput');
+        const loadSvgBtn = document.getElementById('loadSvgBtn');
+        const resetToDefault = document.getElementById('resetToDefault');
+        const fileStatus = document.getElementById('fileStatus');
+
+        // Datos de los iconos
+        const originalIconData = {
+            heart: {
+                name: 'corazon',
+                path: 'polygon',
+                points: '17.32 40.05 22.37 40.05 22.37 45.1 27.42 45.1 27.42 50.15 32.47 50.15 32.47 55.2 37.53 55.2 37.53 50.15 42.58 50.15 42.58 45.1 47.63 45.1 47.63 40.05 52.68 40.05 52.68 35 57.73 35 57.73 29.95 57.73 24.9 57.73 19.85 52.68 19.85 52.68 14.8 37.53 14.8 37.53 19.85 32.47 19.85 32.47 14.8 17.32 14.8 17.32 19.85 12.27 19.85 12.27 24.9 12.27 29.95 12.27 35 17.32 35 17.32 40.05'
+            },
+            gift: {
+                name: 'regalo',
+                path: 'path',
+                points: 'M17.32,52.68v5.05h35.36v-20.2h5.05v-15.15h-17.68v-2.53h2.53v-2.53h2.53v-2.53h-2.53v-2.53h-2.53v2.53h-2.53v7.58h-5.05v-7.58h-2.53v-2.53h-2.53v2.53h-2.53v2.53h2.53v2.53h2.53v2.53H12.27v15.15h5.05v15.15ZM22.37,52.68v-15.15h7.58v15.15h-7.58ZM32.47,52.68v-15.15h5.05v15.15h-5.05ZM47.63,52.68h-7.58v-15.15h7.58v15.15ZM52.68,27.42v5.05h-12.63v-5.05h12.63ZM37.53,27.42v5.05h-5.05v-5.05h5.05ZM17.32,27.42h12.63v5.05h-12.63v-5.05Z'
+            }
+        };
+
+        // Copia trabajable de los datos de iconos
+        let iconData = { ...originalIconData };
+
+        // Animaciones CSS
+        const animations = {
+            none: '',
+            heartbeat: `
+                @keyframes heartbeat {
+                    0%, 100% { transform: scale(1); }
+                    25% { transform: scale(1.1); }
+                    50% { transform: scale(1.2); }
+                    75% { transform: scale(1.1); }
+                }
+                .animated { animation: heartbeat 1s infinite; }
+            `,
+            shake: `
+                @keyframes shake {
+                    0%, 100% { transform: rotate(0deg); }
+                    25% { transform: rotate(-5deg); }
+                    75% { transform: rotate(5deg); }
+                }
+                .animated { animation: shake 0.5s ease-in-out infinite; }
+            `,
+            'fade-in': `
+                @keyframes fade-in {
+                    from { opacity: 0; transform: scale(0.8); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                .animated { animation: fade-in 0.3s ease-out; }
+            `
+        };
+
+        function updatePreview() {
+            const fillColor = fillColorInput.value;
+            const strokeColor = strokeColorInput.value;
+            const strokeWidth = strokeWidthInput.value;
+            const iconType = iconTypeSelect.value;
+            const animationType = animationTypeSelect.value;
+            
+            // Actualizar el color del icono
+            previewIcon.style.color = fillColor;
+            
+            // Para simular el contorno, usamos drop-shadow
+            if (strokeWidth > 0) {
+                previewIcon.style.filter = `
+                    drop-shadow(0 0 0 ${strokeColor}) 
+                    drop-shadow(${strokeWidth}px 0 0 ${strokeColor}) 
+                    drop-shadow(-${strokeWidth}px 0 0 ${strokeColor}) 
+                    drop-shadow(0 ${strokeWidth}px 0 ${strokeColor}) 
+                    drop-shadow(0 -${strokeWidth}px 0 ${strokeColor})
+                `;
+            } else {
+                previewIcon.style.filter = 'none';
+            }
+
+            // Actualizar el contenido del icono
+            const currentIcon = iconData[iconType];
+            if (currentIcon) {
+                // Actualizar viewBox si es diferente
+                if (currentIcon.viewBox) {
+                    previewIcon.setAttribute('viewBox', currentIcon.viewBox);
+                }
+                
+                if (currentIcon.path === 'polygon') {
+                    previewIcon.innerHTML = `<polygon fill="currentColor" points="${currentIcon.points}"/>`;
+                } else if (currentIcon.path === 'group') {
+                    // Para elementos múltiples, envolver en un grupo y aplicar currentColor
+                    const elements = currentIcon.points.split('\n').map(el => el.trim()).filter(el => el);
+                    const colorizedElements = elements.map(element => {
+                        // Agregar fill="currentColor" a cada elemento
+                        if (element.includes('fill=')) {
+                            return element.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+                        } else {
+                            return element.replace(/\/?>$/, ' fill="currentColor"$&');
+                        }
+                    });
+                    previewIcon.innerHTML = `<g>${colorizedElements.join('\n    ')}</g>`;
+                } else {
+                    previewIcon.innerHTML = `<path fill="currentColor" d="${currentIcon.points}"/>`;
+                }
+            }
+
+            // Actualizar animación
+            // Remover clases de animación existentes
+            previewIcon.classList.remove('animate-heartbeat', 'animate-shake', 'animate-fade-in');
+            if (animationType !== 'none') {
+                previewIcon.classList.add(`animate-${animationType}`);
+            }
+            
+            strokeValue.textContent = strokeWidth;
+        }
+
+        function generateSVG() {
+            const fillColor = fillColorInput.value;
+            const strokeColor = strokeColorInput.value;
+            const strokeWidth = parseFloat(strokeWidthInput.value);
+            const iconType = iconTypeSelect.value;
+            const animationType = animationTypeSelect.value;
+            
+            const currentIcon = iconData[iconType];
+            const viewBox = currentIcon.viewBox || '0 0 70 70';
+            
+            // Crear la animación CSS si es necesaria
+            let styleBlock = '';
+            if (animationType !== 'none') {
+                styleBlock = `
+    <style>
+        ${animations[animationType]}
+    </style>`;
+            }
+
+            // Crear el elemento principal
+            let mainElement = '';
+            if (currentIcon.path === 'polygon') {
+                if (strokeWidth > 0) {
+                    mainElement = `    <polygon fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}" points="${currentIcon.points}"/>`;
+                } else {
+                    mainElement = `    <polygon fill="${fillColor}" points="${currentIcon.points}"/>`;
+                }
+            } else if (currentIcon.path === 'group') {
+                // Para elementos múltiples
+                const elements = currentIcon.points.split('\n').map(el => el.trim()).filter(el => el);
+                const styledElements = elements.map(element => {
+                    let styledElement = element;
+                    // Aplicar colores
+                    if (styledElement.includes('fill=')) {
+                        styledElement = styledElement.replace(/fill="[^"]*"/g, `fill="${fillColor}"`);
+                    } else {
+                        styledElement = styledElement.replace(/\/?>$/, ` fill="${fillColor}"$&`);
+                    }
+                    // Aplicar stroke si es necesario
+                    if (strokeWidth > 0) {
+                        if (styledElement.includes('stroke=')) {
+                            styledElement = styledElement.replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`);
+                        } else {
+                            styledElement = styledElement.replace(/\/?>$/, ` stroke="${strokeColor}"$&`);
+                        }
+                        if (styledElement.includes('stroke-width=')) {
+                            styledElement = styledElement.replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`);
+                        } else {
+                            styledElement = styledElement.replace(/\/?>$/, ` stroke-width="${strokeWidth}"$&`);
+                        }
+                    }
+                    return `    ${styledElement}`;
+                });
+                mainElement = `    <g>\n${styledElements.join('\n')}\n    </g>`;
+            } else {
+                if (strokeWidth > 0) {
+                    mainElement = `    <path fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}" d="${currentIcon.points}"/>`;
+                } else {
+                    mainElement = `    <path fill="${fillColor}" d="${currentIcon.points}"/>`;
+                }
+            }
+
+            // Ensamblar el SVG completo
+            const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" class="${animationType !== 'none' ? 'animated' : ''}">${styleBlock}
+${mainElement}
+</svg>`;
+
+            return svgContent;
+        }
+
+        function downloadSVG() {
+            const svgContent = generateSVG();
+            const iconType = iconTypeSelect.value;
+            const currentIcon = iconData[iconType];
+            const animationType = animationTypeSelect.value;
+            
+            // Log para debugging
+            console.log('SVG generado:', svgContent);
+            
+            // Crear nombre de archivo descriptivo
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            const fileName = `icono-${currentIcon.name}-personalizado-${timestamp}.svg`;
+            
+            // Crear blob y descargar
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Mostrar notificación
+            showNotification(`¡SVG descargado como "${fileName}"!`);
+        }
+
+        function previewSVG() {
+            const svgContent = generateSVG();
+            
+            // Crear ventana modal para mostrar el código
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 12px;
+                padding: 24px;
+                max-width: 80vw;
+                max-height: 80vh;
+                overflow: auto;
+                position: relative;
+            `;
+            
+            modalContent.innerHTML = `
+                <h3 style="margin-top: 0; color: #333;">Código SVG Generado</h3>
+                <button id="closeModal" style="position: absolute; top: 16px; right: 16px; background: #f44336; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px;">×</button>
+                <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                    <button id="copyCode" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">📋 Copiar Código</button>
+                    <button id="testSVG" style="background: #FF9800; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🧪 Probar SVG</button>
+                </div>
+                <pre style="background: #f5f5f5; padding: 16px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; line-height: 1.4;">${svgContent.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                <div id="svgTest" style="margin-top: 16px; padding: 16px; background: #f9f9f9; border-radius: 6px; text-align: center;">
+                    <p style="margin: 0 0 12px 0; color: #666; font-size: 14px;">Vista previa del SVG:</p>
+                    <div style="display: inline-block; width: 64px; height: 64px;">${svgContent}</div>
+                </div>
+            `;
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Event listeners para la modal
+            document.getElementById('closeModal').onclick = () => document.body.removeChild(modal);
+            modal.onclick = (e) => { if (e.target === modal) document.body.removeChild(modal); };
+            
+            document.getElementById('copyCode').onclick = () => {
+                navigator.clipboard.writeText(svgContent).then(() => {
+                    showNotification('¡Código SVG copiado al portapapeles!');
+                });
+            };
+            
+            document.getElementById('testSVG').onclick = () => {
+                const testDiv = document.getElementById('svgTest');
+                testDiv.innerHTML = `
+                    <p style="margin: 0 0 12px 0; color: #666; font-size: 14px;">Vista previa del SVG:</p>
+                    <div style="display: inline-block; width: 64px; height: 64px;">${svgContent}</div>
+                `;
+            };
+        }
+
+        // Función para optimizar SVG cargado
+        function optimizeSVG(svgContent, fileName) {
+            try {
+                // Crear un parser DOM
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+                const svgElement = svgDoc.querySelector('svg');
+                
+                if (!svgElement) {
+                    throw new Error('No se encontró elemento SVG válido');
+                }
+
+                // Extraer datos del SVG
+                const viewBox = svgElement.getAttribute('viewBox') || '0 0 70 70';
+                
+                // Buscar elementos path, polygon, rect, circle, etc.
+                const shapes = svgElement.querySelectorAll('path, polygon, rect, circle, ellipse, line, polyline');
+                
+                if (shapes.length === 0) {
+                    throw new Error('No se encontraron formas válidas en el SVG');
+                }
+
+                // Combinar todos los elementos en un solo grupo
+                let combinedPaths = [];
+                
+                shapes.forEach(shape => {
+                    const tagName = shape.tagName.toLowerCase();
+                    let pathData = '';
+                    
+                    switch (tagName) {
+                        case 'path':
+                            pathData = shape.getAttribute('d') || '';
+                            if (pathData) combinedPaths.push(`<path d="${pathData}"/>`);
+                            break;
+                        case 'polygon':
+                            pathData = shape.getAttribute('points') || '';
+                            if (pathData) combinedPaths.push(`<polygon points="${pathData}"/>`);
+                            break;
+                        case 'rect':
+                            const x = parseFloat(shape.getAttribute('x') || '0');
+                            const y = parseFloat(shape.getAttribute('y') || '0');
+                            const width = parseFloat(shape.getAttribute('width') || '0');
+                            const height = parseFloat(shape.getAttribute('height') || '0');
+                            if (width > 0 && height > 0) {
+                                combinedPaths.push(`<rect x="${x}" y="${y}" width="${width}" height="${height}"/>`);
+                            }
+                            break;
+                        case 'circle':
+                            const cx = parseFloat(shape.getAttribute('cx') || '0');
+                            const cy = parseFloat(shape.getAttribute('cy') || '0');
+                            const r = parseFloat(shape.getAttribute('r') || '0');
+                            if (r > 0) {
+                                combinedPaths.push(`<circle cx="${cx}" cy="${cy}" r="${r}"/>`);
+                            }
+                            break;
+                        case 'ellipse':
+                            const cx_e = parseFloat(shape.getAttribute('cx') || '0');
+                            const cy_e = parseFloat(shape.getAttribute('cy') || '0');
+                            const rx = parseFloat(shape.getAttribute('rx') || '0');
+                            const ry = parseFloat(shape.getAttribute('ry') || '0');
+                            if (rx > 0 && ry > 0) {
+                                combinedPaths.push(`<ellipse cx="${cx_e}" cy="${cy_e}" rx="${rx}" ry="${ry}"/>`);
+                            }
+                            break;
+                    }
+                });
+
+                if (combinedPaths.length === 0) {
+                    throw new Error('No se pudieron extraer datos válidos de las formas');
+                }
+
+                // Crear nombre limpio para el archivo
+                const cleanName = fileName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                
+                // Generar SVG optimizado para guardar
+                const optimizedSVG = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">
+    <g>
+        ${combinedPaths.map(path => `        ${path.replace(/fill="[^"]*"/g, 'fill="currentColor"').replace(/\/?>$/, ' fill="currentColor"$&')}`).join('\n')}
+    </g>
+</svg>`;
+
+                // Agregar el nuevo icono a los datos (como grupo de elementos)
+                const newIconKey = `custom_${cleanName}`;
+                iconData[newIconKey] = {
+                    name: cleanName,
+                    path: 'group',
+                    points: combinedPaths.join('\n    '),
+                    viewBox: viewBox,
+                    isCustom: true,
+                    fileName: `${cleanName}-optimizado.svg`,
+                    svgContent: optimizedSVG
+                };
+
+                // Guardar el SVG optimizado (simular descarga automática del archivo optimizado)
+                saveOptimizedSVG(optimizedSVG, `${cleanName}-optimizado.svg`);
+
+                // Actualizar la galería de iconos
+                updateIconGallery();
+                
+                // Actualizar el selector
+                updateIconSelector();
+                
+                // Seleccionar automáticamente el nuevo icono
+                iconTypeSelect.value = newIconKey;
+                
+                // Actualizar vista previa
+                updatePreview();
+
+                return {
+                    success: true,
+                    message: `SVG "${fileName}" optimizado y guardado correctamente (${combinedPaths.length} elementos)`,
+                    iconKey: newIconKey
+                };
+
+            } catch (error) {
+                return {
+                    success: false,
+                    message: `Error al optimizar SVG: ${error.message}`
+                };
+            }
+        }
+
+        // Función para guardar SVG optimizado
+        function saveOptimizedSVG(svgContent, fileName) {
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Función para actualizar la galería de iconos
+        function updateIconGallery() {
+            const iconGrid = document.getElementById('iconGrid');
+            const iconGridStatus = document.getElementById('iconGridStatus');
+            
+            // Limpiar la galería
+            iconGrid.innerHTML = '';
+            
+            // Obtener solo iconos personalizados
+            const customIcons = Object.keys(iconData).filter(key => iconData[key].isCustom);
+            
+            if (customIcons.length === 0) {
+                iconGridStatus.style.display = 'block';
+                return;
+            }
+            
+            iconGridStatus.style.display = 'none';
+            
+            // Crear elementos para cada icono
+            customIcons.forEach(iconKey => {
+                const iconInfo = iconData[iconKey];
+                
+                const iconElement = document.createElement('div');
+                iconElement.style.cssText = `
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: white;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    position: relative;
+                `;
+                
+                // Crear SVG preview
+                const svgPreview = document.createElement('div');
+                svgPreview.style.cssText = `
+                    width: 40px;
+                    height: 40px;
+                    margin-bottom: 8px;
+                    color: #fa345e;
+                `;
+                
+                if (iconInfo.path === 'group') {
+                    const elements = iconInfo.points.split('\n').map(el => el.trim()).filter(el => el);
+                    const colorizedElements = elements.map(element => {
+                        if (element.includes('fill=')) {
+                            return element.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+                        } else {
+                            return element.replace(/\/?>$/, ' fill="currentColor"$&');
+                        }
+                    });
+                    svgPreview.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="${iconInfo.viewBox}" width="100%" height="100%">
+                            <g>${colorizedElements.join('\n')}</g>
+                        </svg>
+                    `;
+                } else if (iconInfo.path === 'polygon') {
+                    svgPreview.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="${iconInfo.viewBox}" width="100%" height="100%">
+                            <polygon fill="currentColor" points="${iconInfo.points}"/>
+                        </svg>
+                    `;
+                } else {
+                    svgPreview.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="${iconInfo.viewBox}" width="100%" height="100%">
+                            <path fill="currentColor" d="${iconInfo.points}"/>
+                        </svg>
+                    `;
+                }
+                
+                // Crear label
+                const label = document.createElement('div');
+                label.textContent = iconInfo.name;
+                label.style.cssText = `
+                    font-size: 10px;
+                    color: #666;
+                    text-align: center;
+                    word-break: break-word;
+                    max-width: 100%;
+                `;
+                
+                // Agregar elementos
+                iconElement.appendChild(svgPreview);
+                iconElement.appendChild(label);
+                
+                // Evento de hover
+                iconElement.addEventListener('mouseenter', () => {
+                    iconElement.style.borderColor = '#fa345e';
+                    iconElement.style.transform = 'translateY(-2px)';
+                    iconElement.style.boxShadow = '0 4px 12px rgba(250, 52, 94, 0.2)';
+                });
+                
+                iconElement.addEventListener('mouseleave', () => {
+                    iconElement.style.borderColor = '#e0e0e0';
+                    iconElement.style.transform = 'translateY(0)';
+                    iconElement.style.boxShadow = 'none';
+                });
+                
+                // Evento de clic
+                iconElement.addEventListener('click', () => {
+                    // Seleccionar el icono
+                    iconTypeSelect.value = iconKey;
+                    updatePreview();
+                    
+                    // Efecto visual de selección
+                    showNotification(`Icono "${iconInfo.name}" seleccionado`);
+                    
+                    // Scroll hacia los controles
+                    document.querySelector('.interactive-controls').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                });
+                
+                iconGrid.appendChild(iconElement);
+            });
+        }
+        function updateIconSelector() {
+            const currentValue = iconTypeSelect.value;
+            iconTypeSelect.innerHTML = '';
+            
+            Object.keys(iconData).forEach(key => {
+                const icon = iconData[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = icon.isCustom ? 
+                    `${icon.name} (personalizado)` : 
+                    (key === 'heart' ? 'Corazón' : 'Regalo');
+                iconTypeSelect.appendChild(option);
+            });
+            
+            // Restaurar selección si existe
+            if (iconData[currentValue]) {
+                iconTypeSelect.value = currentValue;
+            }
+        }
+
+        // Función para cargar archivo SVG
+        function loadSVGFile() {
+            const file = svgFileInput.files[0];
+            if (!file) {
+                showFileStatus('❌ Por favor selecciona un archivo SVG', 'error');
+                return;
+            }
+
+            if (!file.type.includes('svg') && !file.name.toLowerCase().endsWith('.svg')) {
+                showFileStatus('❌ El archivo debe ser un SVG válido', 'error');
+                return;
+            }
+
+            showFileStatus('🔄 Cargando y optimizando SVG...', 'loading');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const svgContent = e.target.result;
+                const result = optimizeSVG(svgContent, file.name);
+                
+                if (result.success) {
+                    showFileStatus(`✅ ${result.message}`, 'success');
+                    showNotification('¡SVG cargado y optimizado correctamente!');
+                } else {
+                    showFileStatus(`❌ ${result.message}`, 'error');
+                }
+            };
+
+            reader.onerror = function() {
+                showFileStatus('❌ Error al leer el archivo', 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Función para mostrar estado del archivo
+        function showFileStatus(message, type) {
+            fileStatus.textContent = message;
+            fileStatus.style.color = type === 'success' ? '#4CAF50' : 
+                                   type === 'error' ? '#f44336' : 
+                                   type === 'loading' ? '#FF9800' : '#666';
+        }
+
+        // Función para resetear a iconos originales
+        function resetToOriginalIcons() {
+            iconData = { ...originalIconData };
+            updateIconSelector();
+            updateIconGallery(); // Limpiar la galería
+            iconTypeSelect.value = 'heart';
+            updatePreview();
+            showFileStatus('↺ Restaurado a iconos originales', 'success');
+            svgFileInput.value = '';
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Event listeners
+        fillColorInput.addEventListener('input', updatePreview);
+        strokeColorInput.addEventListener('input', updatePreview);
+        strokeWidthInput.addEventListener('input', updatePreview);
+        iconTypeSelect.addEventListener('change', updatePreview);
+        animationTypeSelect.addEventListener('change', updatePreview);
+        downloadBtn.addEventListener('click', downloadSVG);
+        previewBtn.addEventListener('click', previewSVG);
+        loadSvgBtn.addEventListener('click', loadSVGFile);
+        resetToDefault.addEventListener('click', resetToOriginalIcons);
+
+        // Tabs
+        function showTab(tabName) {
+            // Ocultar todas las tabs
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remover clase active de todos los botones
+            document.querySelectorAll('.tab').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Mostrar tab seleccionada
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            
+            // Agregar clase active al botón
+            event.target.classList.add('active');
+        }
+
+        // Inicializar preview y galería
+        updatePreview();
+        updateIconGallery();
+    </script>
+</body>
+</html>
