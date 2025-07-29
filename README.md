@@ -13,7 +13,7 @@ Un editor web completo para gestionar y personalizar íconos SVG con control din
 - **Animaciones**: Sistema de animaciones CSS incluido
 - **Descarga de Íconos**: Exportación de íconos personalizados
 - **Carga de Nuevos Íconos**: Subida y optimización automática
-- **53 Íconos**: Colección completa de íconos pixel art optimizados
+- **53+ Íconos**: Colección completa de íconos pixel art optimizados (54 iconos disponibles)
 
 ## 🛠️ Tecnologías
 
