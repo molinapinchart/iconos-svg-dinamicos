@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <rect fill="currentColor" x="12.27" y="17.32" width="20.2" height="5.05"/>
+  <rect fill="currentColor" x="37.53" y="17.32" width="20.2" height="5.05"/>
+  <rect fill="currentColor" x="32.47" y="12.27" width="5.05" height="5.05"/>
+  <path fill="currentColor" d="M32.47,27.42h-10.1v5.05h-5.05v15.15h5.05v5.05h-5.05v5.05h30.31v-5.05h-5.05v-10.1h15.15v-10.1h-5.05v5.05h-10.1v-10.1h-5.05v-5.05h-5.05v5.05ZM22.37,37.53h5.05v-5.05h5.05v10.1h-10.1v-5.05ZM27.42,52.68v-5.05h10.1v5.05h-10.1Z"/>
+</svg>
