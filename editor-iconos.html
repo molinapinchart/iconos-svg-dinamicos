@@ -533,80 +533,25 @@
                 console.log(`📊 API reporta ${apiData.count} iconos disponibles`);
                 
                 iconSelect.innerHTML = '<option value="">Selecciona un icono...</option>';
-                let loadedCount = 0;
-                const validIcons = [];
                 
-                // Cargar cada icono
-                for (const iconName of allAvailableIcons) {
-                    try {
-                        const response = await fetch(`/iconos/${iconName}`);
-                        if (response.ok) {
-                            const svgContent = await response.text();
-                            
-                            // Verificar que el SVG sea válido
-                            if (svgContent.includes('<svg') && svgContent.includes('</svg>')) {
-                                loadedIcons.set(iconName, svgContent);
-                                validIcons.push(iconName);
-                                loadedCount++;
-                                console.log(`✅ Cargado: ${iconName}`);
-                            }
-                        } else {
-                            console.warn(`❌ HTTP ${response.status} para ${iconName}`);
-                        }
-                    } catch (error) {
-                        console.warn(`⚠️ Error cargando ${iconName}:`, error.message);
-                    }
-                }
-                
-                // Si no se pudieron cargar, usar fallback
-                if (loadedCount === 0) {
-                    console.warn('⚠️ Usando iconos placeholder como fallback');
-                    
-                    // Crear iconos placeholder para demostración
-                    allAvailableIcons.forEach(iconName => {
-                        const placeholderSVG = createPlaceholderSVG(iconName);
-                        loadedIcons.set(iconName, placeholderSVG);
-                        validIcons.push(iconName);
-                        loadedCount++;
-                    });
-                    
-                    // Mostrar mensaje informativo
-                    const warningDiv = document.createElement('div');
-                    warningDiv.style.cssText = `
-                        background: #e3f2fd;
-                        border: 2px solid #2196f3;
-                        border-radius: 8px;
-                        padding: 15px;
-                        margin-bottom: 20px;
-                        color: #1565c0;
-                    `;
-                    warningDiv.innerHTML = `
-                        <strong>ℹ️ Modo Demostración</strong><br>
-                        Usando iconos de demostración. Los iconos reales están disponibles en el servidor de producción.
-                    `;
-                    
-                    const uploadSection = document.querySelector('.upload-section');
-                    uploadSection.parentNode.insertBefore(warningDiv, uploadSection);
-                }
-                
-                // Agregar iconos válidos al selector (ordenados alfabéticamente)
-                validIcons.sort().forEach(iconName => {
+                // Agregar todos los iconos al selector sin cargarlos previamente
+                allAvailableIcons.sort().forEach(iconName => {
                     const option = document.createElement('option');
                     option.value = iconName;
                     option.textContent = formatIconName(iconName);
                     iconSelect.appendChild(option);
                 });
                 
-                // Actualizar availableIcons con los iconos válidos
-                availableIcons = validIcons;
+                // Actualizar availableIcons con todos los iconos disponibles
+                availableIcons = allAvailableIcons;
                 
                 // Actualizar el texto del primer option con el conteo
                 const firstOption = iconSelect.querySelector('option[value=""]');
                 if (firstOption) {
-                    firstOption.textContent = `Selecciona un icono... (${loadedCount} disponibles)`;
+                    firstOption.textContent = `Selecciona un icono... (${allAvailableIcons.length} disponibles)`;
                 }
                 
-                console.log(`✅ Cargados ${loadedCount} iconos exitosamente`);
+                console.log(`✅ Cargador listo con ${allAvailableIcons.length} iconos disponibles`);
                 
             } catch (error) {
                 console.error('❌ Error crítico cargando iconos:', error);
@@ -678,7 +623,7 @@
         }
 
         // Seleccionar icono
-        function selectIcon() {
+        async function selectIcon() {
             const selectedIcon = iconSelect.value;
             if (!selectedIcon) {
                 iconPreview.innerHTML = '<div style="font-size: 48px; color: #cbd5e0;">📦</div>';
@@ -687,13 +632,39 @@
                 return;
             }
 
-            currentIconName = selectedIcon;
-            currentIconSVG = loadedIcons.get(selectedIcon);
+            // Mostrar estado de carga
+            iconPreview.innerHTML = '<div style="font-size: 24px; color: #666;">⏳ Cargando...</div>';
             
-            if (currentIconSVG) {
-                updatePreview();
-                loadSpecificAnimations(selectedIcon);
-                downloadBtn.disabled = false;
+            try {
+                // Cargar el icono si no está en caché
+                if (!loadedIcons.has(selectedIcon)) {
+                    console.log(`📥 Cargando icono: ${selectedIcon}`);
+                    const response = await fetch(`/iconos/${selectedIcon}`);
+                    if (response.ok) {
+                        const svgContent = await response.text();
+                        if (svgContent.includes('<svg') && svgContent.includes('</svg>')) {
+                            loadedIcons.set(selectedIcon, svgContent);
+                        } else {
+                            throw new Error('SVG inválido');
+                        }
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                }
+                
+                currentIconName = selectedIcon;
+                currentIconSVG = loadedIcons.get(selectedIcon);
+                
+                if (currentIconSVG) {
+                    updatePreview();
+                    loadSpecificAnimations(selectedIcon);
+                    downloadBtn.disabled = false;
+                    console.log(`✅ Icono cargado: ${selectedIcon}`);
+                }
+            } catch (error) {
+                console.error(`❌ Error cargando icono ${selectedIcon}:`, error);
+                iconPreview.innerHTML = '<div style="font-size: 24px; color: #e53e3e;">❌ Error al cargar</div>';
+                downloadBtn.disabled = true;
             }
         }
 
